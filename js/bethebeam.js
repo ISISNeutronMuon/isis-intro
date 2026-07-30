@@ -115,7 +115,8 @@
     var rtA = null, rtB = null, blendScene = null, blendCam = null, blendMat = null;
     var fired = [];
     var shakeAmt = 0;
-    var lookTarget = null, lookInit = false;
+    var lookTarget = null, lookInit = false, viewDir = null;
+    var capText = "", capShownAt = -1;
     var soundOn = false, audioStarted = false;
     var typeTimer = 0;
     var dots = [], railCount = null;
@@ -265,7 +266,6 @@
       if (chapter.extra) {
         roExtraWrap.firstChild.textContent = chapter.extra.label + " ";
       }
-      subEl.classList.remove("show");
       camera.fov = chapter.fov ? chapter.fov.from : 60;
       camera.updateProjectionMatrix();
       if (audioStarted) { A.setIntensity(chapter.intensity); A.duck(false); }
@@ -274,9 +274,18 @@
       syncRail();
     }
 
+    /* captions persist across the chapter dissolve so a late caption can
+       still be read — but a deliberate skip drops the old text at once */
+    function clearCaption() {
+      capText = "";
+      capShownAt = -1;
+      subEl.classList.remove("show");
+    }
+
     function jump(i) {
       if (mode === "end") endEl.hidden = true;
       killTransition();
+      clearCaption();
       loadChapter(i);
       overlay.focus();   // keep Space = pause, not re-activate the last button
     }
@@ -289,7 +298,11 @@
         t: 0,
         tangent: ctx.path.getTangentAt(1).normalize(),
         speed: 0.35 * len / chapter.duration,   // glide()'s end slope is 0.35
-        look: lookTarget.clone()
+        // hand the outgoing camera the view the rider actually has (viewDir
+        // is the rate-capped direction) — the raw lookTarget can sit beside
+        // or behind the camera mid-pan, which would render the whole
+        // dissolve facing backward
+        dir: viewDir.clone()
       };
       outCam.position.copy(camera.position);
       outCam.fov = camera.fov;
@@ -350,18 +363,20 @@
         }
       }
 
-      // captions
+      // captions — each one owns the strip for 4.2 s from the moment it
+      // fires (sceneTime survives the dissolve, so a caption that starts
+      // near a chapter's end still gets its full reading time)
       var activeCap = null;
       for (var c = 0; c < chapter.captions.length; c++) {
         var cap = chapter.captions[c];
         if (t >= cap[0] && t < cap[0] + 4.2 / chapter.duration) activeCap = cap[1];
       }
-      if (activeCap) {
-        if (subEl.textContent !== activeCap) subEl.textContent = activeCap;
-        subEl.classList.add("show");
-      } else {
-        subEl.classList.remove("show");
+      if (activeCap && activeCap !== capText) {
+        capText = activeCap;
+        capShownAt = sceneTime;
+        subEl.textContent = capText;
       }
+      subEl.classList.toggle("show", !!capText && sceneTime - capShownAt < 4.2);
 
       // HUD numbers — energy is chapter data, speed is physics (MESynth)
       var imp = chapter.impact;
@@ -395,12 +410,21 @@
       // The smoothed lookTarget trails a moving goal by speed/3.2 — the
       // default look point must stay further ahead than that lag, or it
       // falls behind the camera mid-chapter and lookAt flips 180°. So the
-      // lookahead scales with the live path speed (glide'(t)), 1.6× margin.
+      // lookahead scales with the live path speed (glide'(t)), 1.6× margin —
+      // and past the path end it keeps moving along the end tangent, so the
+      // goal can never stall at the endpoint and be overtaken right before
+      // (and during) the dissolve.
       var pathLen = ctx.path.getLength();
       var pathSpeed = pathLen * (0.35 + 3.9 * t * (1 - t)) / chapter.duration;
-      var target = (ctx.gaze && ctx.gaze(t)) ||
-        ctx.path.getPointAt(Math.min(1, k + Math.max(0.03, 0.5 * pathSpeed / pathLen)));
-      if (!lookInit) { lookTarget = target.clone(); lookInit = true; }
+      var target = ctx.gaze && ctx.gaze(t, camPos);
+      if (!target) {
+        var ka = k + Math.max(0.03, 0.5 * pathSpeed / pathLen);
+        target = ka <= 1
+          ? ctx.path.getPointAt(ka)
+          : ctx.path.getPointAt(1).add(
+              ctx.path.getTangentAt(1).multiplyScalar((ka - 1) * pathLen));
+      }
+      if (!lookInit) { lookTarget = target.clone(); lookInit = true; viewDir = null; }
       lookTarget.lerp(target, 1 - Math.exp(-3.2 * dt));
       shakeAmt *= Math.exp(-3.5 * dt);
       camera.position.set(
@@ -408,7 +432,27 @@
         camPos.y + Math.cos(sceneTime * 47) * shakeAmt * 0.25,
         camPos.z
       );
-      camera.lookAt(lookTarget);
+      // aim at the lookTarget through a rate-capped view direction: no goal
+      // handoff (or close fly-by) may whip the view faster than ~250°/s
+      var want = lookTarget.clone().sub(camera.position);
+      if (want.lengthSq() < 1e-8) want = (viewDir || new T.Vector3(0, 0, -1)).clone();
+      want.normalize();
+      if (!viewDir) {
+        viewDir = want.clone();
+      } else {
+        var turn = viewDir.angleTo(want), maxTurn = 4.4 * dt;
+        if (turn > maxTurn) {
+          var axis = new T.Vector3().crossVectors(viewDir, want);
+          if (axis.lengthSq() < 1e-10) axis.crossVectors(new T.Vector3(0, 1, 0), viewDir);
+          if (axis.lengthSq() < 1e-10) axis.crossVectors(new T.Vector3(1, 0, 0), viewDir);
+          viewDir.applyAxisAngle(axis.normalize(), maxTurn).normalize();
+        } else {
+          viewDir.copy(want);
+        }
+      }
+      camera.lookAt(camera.position.x + viewDir.x,
+                    camera.position.y + viewDir.y,
+                    camera.position.z + viewDir.z);
       var baseFov = chapter.fov
         ? chapter.fov.from + (chapter.fov.to - chapter.fov.from) * k
         : 60;
@@ -421,12 +465,22 @@
       if (ctx.update) ctx.update(t, ambientDt, { camPos: camPos, time: sceneTime });
 
       if (trans) {
-        // outgoing scene: camera keeps flying along its last heading
+        // outgoing scene: the camera keeps flying along its last heading
+        // while its view settles onto that heading at the capped turn rate —
+        // a glance-back still mid-pan at the boundary finishes its pan here
+        // instead of freezing off-axis for the whole dissolve
         if (mode !== "paused") {
           trans.t += dt / TRANS_S;
           outCam.position.addScaledVector(trans.tangent, trans.speed * dt);
-          trans.look.addScaledVector(trans.tangent, trans.speed * dt);
-          outCam.lookAt(trans.look);
+          var settle = trans.dir.angleTo(trans.tangent);
+          if (settle > 1e-3) {
+            var sAxis = new T.Vector3().crossVectors(trans.dir, trans.tangent);
+            if (sAxis.lengthSq() < 1e-10) sAxis.crossVectors(new T.Vector3(0, 1, 0), trans.dir);
+            trans.dir.applyAxisAngle(sAxis.normalize(), Math.min(4.4 * dt, settle)).normalize();
+          }
+          outCam.lookAt(outCam.position.x + trans.dir.x,
+                        outCam.position.y + trans.dir.y,
+                        outCam.position.z + trans.dir.z);
         }
         if (trans.ctx.update) {
           trans.ctx.update(1, ambientDt, { camPos: outCam.position, time: sceneTime });
@@ -494,6 +548,7 @@
       soundOn = !!withSound && A && A.supported;
       if (soundOn) audioBegin();
       syncMuteBtn();
+      clearCaption();
       loadChapter(0);
       lastNow = performance.now();
       cancelAnimationFrame(rafId);
@@ -530,6 +585,7 @@
     endExitBtn.addEventListener("click", exit);
     againBtn.addEventListener("click", function () {
       endEl.hidden = true;
+      clearCaption();
       loadChapter(0);
     });
 

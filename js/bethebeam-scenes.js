@@ -60,12 +60,13 @@
   }
 
   /* labels stacked down the axis read as duplicates from afar (sprites always
-     face the camera) — fade each one in only near its own landmark */
+     face the camera) — fade each one in only near its own landmark. Writes the
+     sprite's base opacity; labelSprite's near-fade multiplies on top at render. */
   function fadeLabels(labels, camPos, near, range) {
     for (var i = 0; i < labels.length; i++) {
       var d = labels[i].position.distanceTo(camPos);
       var o = 1 - Math.min(1, Math.max(0, (d - near) / range));
-      labels[i].material.opacity = o;
+      labels[i].userData.base = o;
       labels[i].visible = o > 0.02;
     }
   }
@@ -89,23 +90,36 @@
 
   function labelSprite(T, scene, text, cssColor, pos, scale) {
     var c = document.createElement("canvas");
-    c.width = 512; c.height = 96;
+    var font = "600 44px 'IBM Plex Mono', monospace";
     var g = c.getContext("2d");
-    g.font = "600 44px 'IBM Plex Mono', monospace";
+    g.font = font;
+    // size the canvas to the text (plus glow room) so long labels never clip
+    c.width = Math.max(256, Math.ceil(g.measureText(text).width) + 72);
+    c.height = 96;
+    g = c.getContext("2d");          // resizing resets the context state
+    g.font = font;
     g.textAlign = "center";
     g.textBaseline = "middle";
     g.shadowColor = cssColor;
     g.shadowBlur = 18;
     g.fillStyle = cssColor;
-    g.fillText(text, 256, 50);
+    g.fillText(text, c.width / 2, 50);
     var sp = new T.Sprite(new T.SpriteMaterial({
       map: new T.CanvasTexture(c),
       transparent: true,
       depthWrite: false
     }));
     sp.position.copy(pos);
-    sp.scale.set(scale * 5.33, scale, 1);
+    sp.scale.set(scale * c.width / 96, scale, 1);
     scene.add(sp);
+    // fade out before the label slides past the camera — up close a sprite
+    // reads as one giant glyph filling the screen edge
+    sp.userData.base = 1;
+    sp.onBeforeRender = function (renderer, sc, cam) {
+      var d = sp.position.distanceTo(cam.position);
+      sp.material.opacity = sp.userData.base *
+        Math.min(1, Math.max(0, (d - 4) / 3));
+    };
     return sp;
   }
 
@@ -447,7 +461,7 @@
           trails.push(ln);
         }
         var eLabel = labelSprite(T, scene, "e⁻ ×2 — left behind", "#4fd8eb", new T.Vector3(1, 1.8, -37), 0.85);
-        eLabel.material.opacity = 0;
+        eLabel.userData.base = 0;
         eGrp.visible = false;
         var eMid = new T.Vector3(1, 0, -38);
         var eInit = false;
@@ -499,7 +513,7 @@
               var fade = age < 2.6 ? 1 : Math.max(0, 1 - (age - 2.6) / 1.6);
               ePts.material.opacity = fade;
               trails[0].material.opacity = trails[1].material.opacity = 0.8 * fade;
-              eLabel.material.opacity = Math.min(1, age * 2) * fade;
+              eLabel.userData.base = Math.min(1, age * 2) * fade;
               eLabel.position.set(1, 1.7, -38 + age * 4.5);
             }
             co.update(st.camPos, st.time);
@@ -700,9 +714,9 @@
         var core = new T.Mesh(new T.BoxGeometry(3.4, 2.2, 2.2), basicMat(T, COPPER, 0.95));
         core.position.set(0, 0, -51);
         scene.add(core);
-        for (var i = 0; i < 9; i++) {  // tantalum-clad plate seams
+        for (var i = 0; i < 11; i++) {  // tantalum-clad plate seams — twelve plates
           var seam = new T.Mesh(new T.PlaneGeometry(0.06, 2.3), basicMat(T, 0x070b16, 1));
-          seam.position.set(-1.5 + i * 0.38, 0, -49.8);
+          seam.position.set(-1.7 + (i + 1) * 3.4 / 12, 0, -49.8);
           scene.add(seam);
         }
         addFrame(T, scene, "#ffb84d", 5, new T.Vector3(0, 0, -49.6), new T.Vector3(0, 0, -44));
@@ -919,9 +933,9 @@
         var scene = fogged(T, 0x020705, 0x04100a, 0.035);
         var path = new T.CatmullRomCurve3([
           new T.Vector3(0, 0, 0), new T.Vector3(0, 0, -12), new T.Vector3(0, 0, -24),
-          new T.Vector3(0, 0, -30),                          // sample ≈ t 0.55
-          new T.Vector3(-6, 0.4, -38), new T.Vector3(-14, 0.8, -46)
-        ]);
+          new T.Vector3(0, 0, -28.6),                        // sample ≈ t 0.55 — the
+          new T.Vector3(-6, 0.4, -38), new T.Vector3(-14, 0.8, -46)   // kink grazes the
+        ]);                                                  // lattice, never enters it
         // sample tank
         addRails(T, scene, { n: 10, r: 16, z0: -16, z1: -52, color: LINE, opacity: 0.35 });
         // the crystal: a 3×3×3 lattice
@@ -950,9 +964,12 @@
         var ping = addRing(T, scene, GREEN, 0.5, 0.045, -30.5, 0, true);
         return {
           scene: scene, path: path,
-          gaze: function (t) {
+          gaze: function (t, camPos) {
             if (t < 0.5) return samplePos;
-            if (t >= 0.55 && t < 0.7) return samplePos;     // glance back as you peel away
+            // glance back as you peel away — but only once the sample is far
+            // enough behind that the look-back can't whip the view
+            if (t >= 0.55 && t < 0.7 &&
+                (!camPos || camPos.distanceTo(samplePos) > 2.5)) return samplePos;
             return null;
           },
           update: function (t, dt, st) {
