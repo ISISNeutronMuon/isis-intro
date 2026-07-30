@@ -683,7 +683,7 @@
       impact: { t: 0.78, you: "n⁰", mass: "n", energy: 2, tint: TINT_H },
       captions: [[0.2, "tantalum-clad tungsten. no exit for protons."],
                  [0.55, "brace"],
-                 [0.8, "…you are one of ~20 neutrons. direction: nobody's choice."]],
+                 [0.8, "…you are one of ~10–15 neutrons. direction: nobody's choice."]],
       events: [{ t: 0.78, flash: 1, shake: 0.7, boom: true, you: "n⁰", tint: TINT_H }],
       build: function (T) {
         var scene = fogged(T, 0x070307, 0x0d0508, 0.03);
@@ -715,8 +715,8 @@
           return [0, 0, -50];
         });
         burst.visible = false;
-        // ~20 neutrons per proton: twenty bright, distinct tracks
-        var TRK = 20, trkDirs = [];
+        // ~10-15 neutrons per proton: a dozen bright, distinct tracks
+        var TRK = 12, trkDirs = [];
         for (var d2 = 0; d2 < TRK; d2++) {
           var th2 = Math.acos(2 * rng() - 1), ph2 = rng() * Math.PI * 2;
           trkDirs.push([Math.sin(th2) * Math.cos(ph2), Math.sin(th2) * Math.sin(ph2), Math.cos(th2)]);

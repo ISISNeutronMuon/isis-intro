@@ -52,8 +52,8 @@
         },
         target: {
           title: "Tantalum-clad tungsten target",
-          body: "Ten tungsten plates, each clad in tantalum so the cooling water never touches bare tungsten. Every 800 MeV proton that lands chips ~20 neutrons off the nuclei it hits. The whole target–reflector–moderator assembly was replaced new in the 2021 refurbishment.",
-          stat: "~5×10¹⁴", label: "neutrons per pulse (~20 per proton)"
+          body: "Twelve tungsten plates, each clad in tantalum so the cooling water never touches bare tungsten. Every 800 MeV proton that lands chips ~10–15 neutrons off the nuclei it hits. The whole target–reflector–moderator assembly was replaced new in the 2021 refurbishment.",
+          stat: "~4×10¹⁴", label: "neutrons per pulse (~10–15 per proton)"
         },
         mods: {
           title: "Four moderators",
@@ -158,8 +158,8 @@
         },
         {
           title: "T = 0 — impact",
-          body: "The bunches hit the face of the tantalum-clad tungsten plates. Each 800 MeV proton blows ~20 neutrons out of the nuclei it strikes — spallation, as in chipping flakes off a rock. The beam dumps up to 160 kW into a shoebox of metal; cooling water carries the heat away.",
-          stat: "~20", label: "neutrons per proton"
+          body: "The bunches hit the face of the tantalum-clad tungsten plates. Each 800 MeV proton blows ~10–15 neutrons out of the nuclei it strikes — spallation, as in chipping flakes off a rock. The beam dumps up to 160 kW into a shoebox of metal; cooling water carries the heat away.",
+          stat: "~10–15", label: "neutrons per proton"
         },
         {
           title: "T + tens of µs — moderation",
