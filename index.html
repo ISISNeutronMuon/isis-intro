@@ -59,7 +59,7 @@
       <div class="scene-text">
         <p class="kicker reveal">Scene 02 — the machine</p>
         <h2 class="reveal d1">First, make protons. Fast ones.</h2>
-        <p class="reveal d2">It starts as hydrogen gas. Ions are accelerated down a linac (a straight-line accelerator), then around a synchrotron ring <strong>163&nbsp;m</strong> in circumference. At injection the spare electrons are stripped off, leaving bare protons that gain energy each lap until they’re kicked out toward the metal targets where the neutrons and muons are made (next scene).</p>
+        <p class="reveal d2">It starts as hydrogen gas, turned into <strong>H⁻ ions</strong> — protons carrying two spare electrons, so the whole thing is negatively charged. They’re accelerated down a linac (a straight-line accelerator) and into a synchrotron ring <strong>163&nbsp;m</strong> in circumference, where a very thin carbon foil strips both electrons off each ion — leaving bare protons that gain energy each lap until they’re kicked out toward the metal targets where the neutrons and muons are made (next scene).</p>
         <p class="scene-stat reveal d3"><span class="num">800 MeV</span><span class="label">mega-electronvolts of proton energy — 84% of the speed of light, one lap every 0.65 <span class="unit">µs</span></span></p>
       </div>
       <figure class="scene-fig reveal d2">
@@ -99,11 +99,11 @@
       <div class="scene-text">
         <p class="kicker reveal">Scene 03 — two probes for the price of one</p>
         <h2 class="reveal d1">The beam makes muons, then neutrons.</h2>
-        <p class="reveal d2">On the way to Target Station 1 the protons first pass through a <strong>1&nbsp;cm slice of graphite</strong>, where collisions make short-lived particles called pions, which fall apart (‘decay’) within metres into <strong style="color:var(--muon)">muons</strong> — heavy, unstable cousins of the electron. Graphite is thin and light, so most protons punch straight through; the surviving beam then slams into a thick <strong>tungsten target</strong>, chipping <strong style="color:var(--neutron)">neutrons</strong> off its heavy, neutron-packed nuclei. That process is called spallation. (From here we follow the neutrons — the muons’ story continues on the <a href="probes.html">probes page</a>.)</p>
+        <p class="reveal d2">On the way to Target Station 1 the protons first pass through a <strong>1&nbsp;cm slice of graphite</strong>, where collisions make short-lived particles called pions, which fall apart (‘decay’) within metres into <strong style="color:var(--muon)">muons</strong> — heavy, unstable cousins of the electron. Graphite is thin and light, so most protons punch straight through; the surviving beam then slams into a thick <strong>tungsten target</strong>, chipping <strong style="color:var(--neutron)">neutrons</strong> off its heavy, neutron-packed nuclei. That process is called spallation, and the neutrons spray out in every direction — which is why the moderators in the next scene sit above <em>and</em> below the target, not just downstream of it. (From here we follow the neutrons — the muons’ story continues on the <a href="probes.html">probes page</a>.)</p>
         <p class="scene-stat reveal d3"><span class="num">~10–15</span><span class="label">neutrons knocked out per incoming proton</span></p>
       </div>
       <figure class="scene-fig reveal d2">
-        <svg viewBox="0 0 420 280" role="img" aria-label="Proton beam passes a thin graphite target producing labelled muons, then hits a tungsten target producing a labelled burst of neutrons.">
+        <svg viewBox="0 0 420 280" role="img" aria-label="Proton beam passes a thin graphite target producing labelled muons, then hits a tungsten target producing a labelled burst of neutrons that fly outward in all directions.">
           <!-- beam path -->
           <line x1="0" y1="170" x2="330" y2="170" stroke="#233055" stroke-width="3"/>
           <!-- graphite -->
@@ -122,21 +122,29 @@
             <text x="112" y="136" fill="#b78aff" font-size="10" font-family="IBM Plex Mono, monospace">muons (μ)</text>
           </g>
           <text x="160" y="60" fill="#b78aff" font-size="10" font-family="IBM Plex Mono, monospace">→ muon instruments</text>
-          <!-- neutron burst from tungsten, label grows with it -->
+          <!-- neutron burst from tungsten, label grows with it. The evaporation
+               neutrons ISIS actually uses leave the target in all directions, so
+               these rays ring the full circle — including back up the beam. -->
           <g class="fx-burst" style="transform-origin: 347px 170px">
             <g stroke="#4fd8eb" stroke-width="1.4">
-              <line x1="347" y1="170" x2="395" y2="120"/>
-              <line x1="347" y1="170" x2="408" y2="160"/>
-              <line x1="347" y1="170" x2="400" y2="210"/>
-              <line x1="347" y1="170" x2="360" y2="105"/>
-              <line x1="347" y1="170" x2="368" y2="235"/>
+              <line x1="347" y1="170" x2="402" y2="150"/>
+              <line x1="347" y1="170" x2="372" y2="117"/>
+              <line x1="347" y1="170" x2="327" y2="116"/>
+              <line x1="347" y1="170" x2="294" y2="146"/>
+              <line x1="347" y1="170" x2="293" y2="190"/>
+              <line x1="347" y1="170" x2="328" y2="210"/>
+              <line x1="347" y1="170" x2="362" y2="211"/>
+              <line x1="347" y1="170" x2="400" y2="195"/>
             </g>
             <g fill="#4fd8eb">
-              <circle cx="395" cy="120" r="4"/>
-              <circle cx="408" cy="160" r="4"/>
-              <circle cx="400" cy="210" r="4"/>
-              <circle cx="360" cy="105" r="3.2"/>
-              <circle cx="368" cy="235" r="3.2"/>
+              <circle cx="402" cy="150" r="4"/>
+              <circle cx="372" cy="117" r="4"/>
+              <circle cx="327" cy="116" r="3.2"/>
+              <circle cx="294" cy="146" r="3.2"/>
+              <circle cx="293" cy="190" r="3.2"/>
+              <circle cx="328" cy="210" r="3.2"/>
+              <circle cx="362" cy="211" r="4"/>
+              <circle cx="400" cy="195" r="4"/>
             </g>
             <text x="368" y="94" fill="#4fd8eb" font-size="10" text-anchor="middle" font-family="IBM Plex Mono, monospace">neutrons (n)</text>
           </g>
@@ -152,7 +160,7 @@
       <div class="scene-text">
         <p class="kicker reveal">Scene 04 — slow down</p>
         <h2 class="reveal d1">Fresh neutrons are uselessly fast.</h2>
-        <p class="reveal d2">Straight off the target they move at tens of thousands of km/s — far too fast to probe atoms. So they pass through a <strong>moderator</strong>: a small tank of water, liquid methane or liquid hydrogen. Quantum mechanics’ strange gift: anything that moves also behaves as a wave — the slower it moves, the longer its wavelength. A few dozen bounces later they emerge thousands of times slower, with wavelengths that match the spacing between atoms.</p>
+        <p class="reveal d2">Straight off the target they move at tens of thousands of km/s — far too fast to probe atoms. So they pass through a <strong>moderator</strong>: a small tank of water, liquid methane or liquid hydrogen — all of them packed with light nuclei. Every bounce is an elastic collision, billiard balls rather than absorption, and a light nucleus takes away far more of the neutron’s speed than a heavy one would. Quantum mechanics’ strange gift: every particle of matter also behaves as a wave, and for a neutron, the slower it moves the longer its wavelength. About 14 collisions later they emerge thousands of times slower, with wavelengths that match the spacing between atoms — and energies that match how those atoms are moving.</p>
         <p class="scene-stat reveal d3"><span class="num">≈ 1/10,000th</span><span class="label">of their speed left after moderation — and that’s the point</span></p>
       </div>
       <figure class="scene-fig reveal d2">
@@ -168,7 +176,7 @@
           <circle class="mod-slow" cx="270" cy="100" r="6" fill="#4fd8eb"/>
           <text x="395" y="88" fill="#4fd8eb" font-size="10" text-anchor="end" font-family="IBM Plex Mono, monospace">cold, slow, useful</text>
         </svg>
-        <figcaption class="figure-caption">hot in, cold out — ‘cold’ just means slow — repeated 50 times a second</figcaption>
+        <figcaption class="figure-caption">hot in, cold out — ‘cold’ just means slow — repeated 40 times a second at Target Station 1</figcaption>
       </figure>
     </div>
   </section>
@@ -179,10 +187,10 @@
       <div class="scene-text center">
         <p class="kicker reveal">Scene 05 — the race that measures itself</p>
         <h2 class="reveal d1">Every pulse is a race down the beamline.</h2>
-        <p class="reveal d2">All the neutrons in a pulse start together. Remember: slower = longer wave. So the short-wavelength ones are fast; the long-wavelength ones lag. By the time they reach the sample (the sliver of material a researcher has parked in the beam to study), <em>arrival time tells you the wavelength</em> — the facility’s clock is its most important instrument.</p>
+        <p class="reveal d2">The neutrons in a pulse start <em>almost</em> together: the protons arrive as two bunches 0.32&nbsp;µs apart, and the moderator holds each neutron for a slightly different time on the way out. Remember: slower = longer wave. So the short-wavelength ones are fast; the long-wavelength ones lag. By the time they reach the sample (the sliver of material a researcher has parked in the beam to study), <em>arrival time tells you the wavelength</em> — the facility’s clock is its most important instrument, and that small smear in the start time is exactly what limits how sharply it can read.</p>
       </div>
       <figure class="scene-fig wide reveal d2">
-        <svg viewBox="0 0 700 150" role="img" aria-label="Three neutrons of different wavelengths start together and spread apart down a 10 metre beamline; an arrival time is logged as each one reaches the sample.">
+        <svg viewBox="0 0 700 150" role="img" aria-label="Three neutrons of different wavelengths start almost together and spread apart down a 10 metre beamline; an arrival time is logged as each one reaches the sample.">
           <line x1="30" y1="60" x2="670" y2="60" stroke="#233055" stroke-width="2" stroke-dasharray="4 7"/>
           <g fill="#8a96c2" font-size="9" font-family="IBM Plex Mono, monospace" text-anchor="middle">
             <text x="30" y="40">moderator</text>
@@ -204,7 +212,7 @@
           </g>
         </svg>
         <p class="tof-eq reveal d3"><code>λ&nbsp;≈&nbsp;3956&nbsp;·&nbsp;t&nbsp;/&nbsp;L</code> — wavelength in ångströms (Å: a ten-billionth of a metre, about the width of an atom), from arrival time t (s) over flight path L (m). The 3956 isn’t magic — a neutron’s speed × wavelength always equals 3956&nbsp;m·Å/s. <a href="data.html#tof">Try it yourself →</a></p>
-        <figcaption class="figure-caption">on loop: all three leave together — the clock is what tells them apart</figcaption>
+        <figcaption class="figure-caption">on loop: all three leave within microseconds of each other — the clock is what tells them apart</figcaption>
       </figure>
     </div>
   </section>
@@ -215,11 +223,11 @@
       <div class="scene-text">
         <p class="kicker reveal">Scene 06 — the data is born</p>
         <h2 class="reveal d1">Detectors don’t see pictures. They see events.</h2>
-        <p class="reveal d2">Neutrons scatter off the sample and hit banks of detectors. Each hit is recorded as a tiny log line: <span class="mono">(detector&nbsp;ID, time&nbsp;of&nbsp;flight)</span>. That’s the raw data — no images, no spectra, just an enormous, append-only event log.</p>
-        <p class="scene-stat reveal d3"><span class="num">10⁶–10⁹</span><span class="label">events in the file from one ‘run’ (a single measurement, minutes to hours)</span></p>
+        <p class="reveal d2">Neutrons scatter off the sample and hit banks of detectors. Every hit is just <span class="mono">(detector&nbsp;ID, time&nbsp;of&nbsp;flight)</span> — no images, no spectra, only counts and clocks. On most ISIS instruments the electronics don’t keep each hit as its own row: they add 1 to the bucket for that detector and that slice of time, so what lands in the file is already a tally. (Instruments that <em>do</em> save every hit separately are running in ‘event mode’ — both shapes, and why it matters, on the <a href="data.html#events">data page</a>.)</p>
+        <p class="scene-stat reveal d3"><span class="num">10⁶–10⁹</span><span class="label">neutrons counted in one ‘run’ (a single measurement, minutes to hours)</span></p>
       </div>
       <figure class="scene-fig reveal d2">
-        <svg viewBox="0 0 420 240" role="img" aria-label="Scattered neutrons fly from a sample to an arc of detector tiles; each hit flashes a tile and builds up the histogram of counts against time of flight, and a few example hits appear as event log lines of detector ID and arrival time.">
+        <svg viewBox="0 0 420 240" role="img" aria-label="Scattered neutrons fly from a sample to an arc of detector tiles; each hit flashes a tile and builds up the histogram of counts against time of flight, and a few example hits appear as lines of detector ID and arrival time.">
           <circle cx="210" cy="80" r="9" fill="#eef2ff"/>
           <text x="210" y="62" fill="#8a96c2" font-size="9" text-anchor="middle" font-family="IBM Plex Mono, monospace">sample</text>
           <g class="det-arc">
@@ -230,7 +238,7 @@
                samples four of those hits — times/colors match the generated
                arrivals (TOF span 0–12 ms across the 15 bins) -->
           <g class="ev-log" font-size="9" font-family="IBM Plex Mono, monospace">
-            <text x="8" y="104" fill="#8a96c2">event log:</text>
+            <text x="8" y="104" fill="#8a96c2">example hits:</text>
             <text class="l1" x="8" y="120" fill="#ff8a5c">(det 02, 2.0 ms)</text>
             <text class="l2" x="8" y="134" fill="#ffc46b">(det 07, 3.7 ms)</text>
             <text class="l3" x="8" y="148" fill="#b8e986">(det 04, 6.5 ms)</text>
@@ -239,7 +247,7 @@
           <g class="histo" id="det-histo" aria-hidden="true"></g>
           <text x="210" y="232" fill="#8a96c2" font-size="9" text-anchor="middle" font-family="IBM Plex Mono, monospace">counts vs time of flight, building up</text>
         </svg>
-        <figcaption class="figure-caption">on loop: each pulse builds the histogram hit by hit — the log shows a sample of events</figcaption>
+        <figcaption class="figure-caption">on loop: each pulse builds the histogram hit by hit — the list shows a sample of hits</figcaption>
       </figure>
     </div>
   </section>
@@ -250,7 +258,7 @@
       <div class="scene-text center">
         <p class="kicker reveal">Interlude — scenes 02–06 in one picture</p>
         <h2 class="reveal d1">One pulse, end to end.</h2>
-        <p class="reveal d2">Fifty times a second: protons accelerate, shed muons at the graphite, make neutrons in the tungsten, slow down in the moderator, then race down the beamline — and every detector hit becomes one logged event.</p>
+        <p class="reveal d2">Forty times a second at Target Station 1: protons accelerate, shed muons at the graphite, make neutrons in the tungsten, slow down in the moderator, then race down the beamline — and every detector hit becomes one more count.</p>
       </div>
       <figure class="scene-fig wide reveal d2">
         <svg viewBox="0 0 760 200" role="img" aria-label="The full ISIS chain in one schematic: a linac feeds the synchrotron ring; extracted protons pass a graphite slice making muons, hit the tungsten target making neutrons, which slow in the moderator, race down the flight path, scatter off the sample and hit detector tiles.">
@@ -294,9 +302,12 @@
             <circle cx="218" cy="112" r="2.4" fill="#b78aff" opacity=".7"/>
           </g>
           <g class="rc-actor rc-burst" style="transform-origin: 296px 120px" stroke="#4fd8eb" stroke-width="1.2">
-            <line x1="296" y1="120" x2="318" y2="100"/>
-            <line x1="296" y1="120" x2="322" y2="124"/>
-            <line x1="296" y1="120" x2="314" y2="142"/>
+            <line x1="296" y1="120" x2="319" y2="107"/>
+            <line x1="296" y1="120" x2="296" y2="94"/>
+            <line x1="296" y1="120" x2="274" y2="107"/>
+            <line x1="296" y1="120" x2="274" y2="133"/>
+            <line x1="296" y1="120" x2="296" y2="146"/>
+            <line x1="296" y1="120" x2="319" y2="133"/>
           </g>
           <circle class="rc-actor rc-nf" cx="296" cy="120" r="4" fill="#ffc46b"/>
           <circle class="rc-actor rc-r1" cx="360" cy="112" r="4.5" fill="#ff8a5c"/>
@@ -314,7 +325,7 @@
       <div class="scene-text">
         <p class="kicker reveal">Scene 07 — from log file to physics</p>
         <h2 class="reveal d1">Reduction turns events into answers.</h2>
-        <p class="reveal d2">Software — at ISIS, mainly <strong>Mantid</strong> — aggregates the events, converts clock-time into physical units, divides out the machine’s fingerprint (the source delivers more neutrons at some wavelengths than others — dividing by a reference run removes that bias) and fits a model. Out the other end: numbers with error bars that go straight into a paper.</p>
+        <p class="reveal d2">Software — at ISIS, mainly <strong>Mantid</strong> — takes those tallies and converts time of flight into physical units, using the fact that it knows where every detector sits. Then it strips out the machine’s own fingerprint with the help of extra measurements — a standard sample, an empty sample container, a monitor count — some divided out, some subtracted, until what’s left is the sample’s own signal and a model can be fitted to it. The one thing reduction can’t remove is that start-time smear from Scene 05, so it gets built into the fit instead. Out the other end: numbers with error bars that go straight into a paper.</p>
         <p class="reveal d3"><a class="btn primary" href="data.html#playground">Run the pipeline yourself ▸</a></p>
       </div>
       <figure class="scene-fig reveal d2">

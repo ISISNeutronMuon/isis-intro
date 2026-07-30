@@ -56,7 +56,7 @@
   <div class="page-intro">
     <span class="kicker">04 / Data</span>
     <h1>From counts to curves</h1>
-    <p class="lede">A detector doesn’t measure science. It measures <em>events</em> — “detector&nbsp;7041 fired at 12,330&nbsp;µs”. Turning billions of those log lines into a curve someone can publish is called <strong>data reduction</strong>, and it’s an ETL pipeline you can run with your own hands below.</p>
+    <p class="lede">A detector doesn’t measure science. It measures <em>events</em> — “detector&nbsp;7041 fired at 12,330&nbsp;µs”. Turning billions of those hits into a curve someone can publish is called <strong>data reduction</strong>, and it’s an ETL pipeline you can run with your own hands below.</p>
   </div>
 
   <!-- S1: TOF scrubber -->
@@ -103,14 +103,15 @@
 
   <!-- S2: events vs histograms -->
   <section id="events" aria-labelledby="events-h">
-    <span class="kicker">4.2 — The raw data is a log file</span>
+    <span class="kicker">4.2 — Two shapes of raw data</span>
     <h2 id="events-h">Events vs histograms</h2>
     <div class="two-col">
       <div>
-        <p>In event mode, the data file is literally a list: <span class="mono">(detector&nbsp;ID, time&nbsp;of&nbsp;flight)</span>, one line per detected neutron, millions to billions of lines per run. Nothing is summarized yet — like raw, unaggregated logs.</p>
-        <p>A <strong>histogram</strong> is the aggregation you choose afterwards: chop time into bins, count events per bin. Wide bins smooth away detail; narrow bins go noisy because each bin holds only a few counts. The events are always the ground truth — you can re-bin them any way you like, any number of times.</p>
+        <p>A detector really does catch one neutron at a time. What reaches the <em>file</em> is another matter: on most ISIS instruments the electronics aggregate as they go, so each hit simply adds 1 to the bucket for that detector and that slice of time. Some instruments can instead keep every hit separately — that’s <strong>event mode</strong>.</p>
+        <p>In event mode the data file is literally a list: <span class="mono">(detector&nbsp;ID, time&nbsp;of&nbsp;flight)</span>, one line per detected neutron, millions to billions of lines per run. Nothing is summarized yet — like raw, unaggregated logs.</p>
+        <p>A <strong>histogram</strong> is that same data with time chopped into bins and the hits counted per bin — either done for you in hardware as the run proceeds, or done afterwards in software from an event list. Wide bins smooth away detail; narrow bins go noisy because each bin holds only a few counts. Where the events were kept, they stay the ground truth — you can re-bin them any way you like, any number of times.</p>
         <p><strong>Why keep the log instead of just the summary?</strong> Three wins. ① <em>Choose resolution later</em> — re-bin the same run coarsely for a quick look during the experiment, finely for the final fit, with no re-measuring. ② <em>Filter by time</em> — every event is timestamped, so you can keep only the events recorded while the sample was actually at temperature, or slice one long run into chunks and watch a battery charge or a protein unfold as a sequence of frames. ③ <em>Nothing is ever lost</em> — a histogram can always be rebuilt from the events, but never the other way round; an aggregation mistake costs a re-run of software, not a re-run of beam time.</p>
-        <p class="footnote">In Mantid these two shapes are literally two workspace types: <span class="mono">EventWorkspace</span> (the log) and <span class="mono">Workspace2D</span> (the aggregated histogram) — and the time-slicing trick is the <span class="mono">FilterEvents</span> family of algorithms.</p>
+        <p class="footnote">In Mantid these two shapes are literally two workspace types: <span class="mono">EventWorkspace</span> (the log) and <span class="mono">Workspace2D</span> (the aggregated histogram) — and the time-slicing trick is the <span class="mono">FilterEvents</span> family of algorithms. The two shapes even arrive as two different file types: ISIS histogram NeXus files load with <span class="mono">LoadISISNexus</span>, event files with <span class="mono">LoadEventNexus</span>.</p>
       </div>
       <figure class="figure-frame">
         <div class="control-row">
