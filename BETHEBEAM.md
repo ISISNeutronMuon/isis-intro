@@ -97,7 +97,7 @@ Two adversarially-verified workflow audits (46 agents total) ran against the fea
 - Live deploy spot-check (2026-06-11): Three.js r149 loads, ride launches (overlay + WebGL canvas), subnav tab and cross-link card present, index caption reads ~10,000 laps, zero console errors / failed requests
 - **Still manual:** Firefox parity, an actual listen to the soundtrack, OS-level reduced-motion toggle
 
-*Status: committed and deployed 2026-06-11; live at https://janukahw.github.io/isis-intro/bethebeam.html.*
+*Status: committed and deployed 2026-06-11; live at https://isisneutronmuon.github.io/isis-intro/bethebeam.html.*
 
 ## 5. Bird's-eye geometry audit (2026-06-12)
 

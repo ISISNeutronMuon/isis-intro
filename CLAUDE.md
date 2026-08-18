@@ -2,12 +2,12 @@
 
 Interactive educational website about neutrons, muons, and the ISIS Neutron and Muon Source — for ISIS staff **without** a physics background (e.g. software engineers). Graphics-first, interactive-first, plain-language: every physics term gets an inline gloss the first time it appears on a page.
 
-**Status:** live at https://janukahw.github.io/isis-intro/ (GitHub Pages). All seven pages built, fact-checked, and responsive-tested. See README.md for the public-facing overview.
+**Status:** live at https://isisneutronmuon.github.io/isis-intro/ (GitHub Pages). All seven pages built, fact-checked, and responsive-tested. See README.md for the public-facing overview.
 
 ## Commands
 
 - **Run:** open `index.html` directly (`file://` works by design) or `python -m http.server 8000`. No build step, no install.
-- **Deploy:** push to `main` on https://github.com/janukahw/isis-intro — GitHub Pages (deploy-from-branch, root) redeploys automatically in ~1 minute. The site lives at the `/isis-intro/` subpath, so all URLs must stay relative.
+- **Deploy:** push to `main` on https://github.com/ISISNeutronMuon/isis-intro — GitHub Pages (deploy-from-branch, root) redeploys automatically in ~1 minute. The site lives at the `/isis-intro/` subpath, so all URLs must stay relative.
 - **Lint/test:** none configured. `node --check js/*.js` for syntax; manual verification per the checklist below.
 
 ## Architecture (hard rules)
@@ -48,4 +48,4 @@ Facts must trace to isis.stfc.ac.uk (especially the "Practical Guide to ISIS" PD
 2. Playground end-to-end: Load → ConvertUnits (peaks align) → Rebin → Normalize → Fit near 3.14 Å reports the centre within ±0.01 Å; Reset restores; steps can't run out of order.
 3. Firefox for animation parity (loops are plain CSS keyframes); OS reduced-motion for the static path.
 4. Responsive: no horizontal overflow at 375 / 768 / 1024 / 1366 / 1920 px; nav collapses behind MENU on narrow widths.
-5. After pushing: spot-check https://janukahw.github.io/isis-intro/ (subpath-relative links, console clean).
+5. After pushing: spot-check https://isisneutronmuon.github.io/isis-intro/ (subpath-relative links, console clean).
