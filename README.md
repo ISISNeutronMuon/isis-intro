@@ -4,7 +4,7 @@ An interactive, graphics-first introduction to **neutrons, muons, and the [ISIS 
 
 No equations you can't skip. Lots of things to click, drag, and scrub.
 
-**▶ Live site: https://janukahw.github.io/isis-intro/**
+**▶ Live site: https://isisneutronmuon.github.io/isis-intro/**
 
 > ⚠️ Unofficial and simplified. Built as a learning aid; not an ISIS/STFC publication.
 
@@ -15,7 +15,7 @@ No build step, no dependencies. Either:
 - **Open `index.html` directly** in a browser (works from `file://`), or
 - serve the folder: `python -m http.server 8000` → http://localhost:8000
 
-The site is deployed with **GitHub Pages** (deploy from branch: `main`, root) at https://janukahw.github.io/isis-intro/ — every push to `main` redeploys automatically in about a minute.
+The site is deployed with **GitHub Pages** (deploy from branch: `main`, root) at https://isisneutronmuon.github.io/isis-intro/ — every push to `main` redeploys automatically in about a minute.
 
 ## The pages
 
